@@ -1,4 +1,6 @@
+using GraphQL.Server.Ui.Voyager;
 using GraphQL_HotChocolate.DataContext;
+using GraphQL_HotChocolate.GrahpQL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +13,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // add DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
    options.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnection"))
 );
+
+// add GraphQL configuration
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
 
 
 var app = builder.Build();
@@ -26,6 +33,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapGraphQL();
+
+app.UseGraphQLVoyager(new VoyagerOptions { GraphQLEndPoint = "/graphql" }, "/graphql-voyager");
 
 app.UseAuthorization();
 

@@ -4,28 +4,28 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GraphQL_HotChocolate.DataContext.Configs
 {
-    public class PlatformConfig : IEntityTypeConfiguration<Platform>
+    public class CommandConfig : IEntityTypeConfiguration<Command>
     {
-        public void Configure(EntityTypeBuilder<Platform> builder)
+        public void Configure(EntityTypeBuilder<Command> builder)
         {
             // define primary key
-            builder.HasKey(p => p.Id);
+            builder.HasKey(c => c.Id);
 
             // define datatypes
             builder
-                .Property(p => p.Name)
+                .Property(c => c.HowTo)
                 .IsRequired()
-                .HasMaxLength(256);
+                .HasMaxLength(800);
 
             builder
-                .Property(p => p.LicenseKey)
+                .Property(c => c.CommandLine)
                 .IsRequired()
-                .HasMaxLength(250);
+                .HasMaxLength(200);
 
             // define relationships
             builder
-                .HasMany(p => p.Commands)
-                .WithOne(c => c.Platform);
+                .HasOne(c => c.Platform)
+                .WithMany(p => p.Commands);
         }
     }
 }
