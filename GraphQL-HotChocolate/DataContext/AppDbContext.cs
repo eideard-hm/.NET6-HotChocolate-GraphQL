@@ -9,6 +9,7 @@ namespace GraphQL_HotChocolate.DataContext
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Command> Commands { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
